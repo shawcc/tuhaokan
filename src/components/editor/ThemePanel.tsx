@@ -1,11 +1,11 @@
-import { Check, Palette, Sparkles } from 'lucide-react'
+import { Check, Palette } from 'lucide-react'
 import { useEditorStore } from '../../store/editorStore'
 import type { BackgroundMode } from '../../types/editor'
 
-const themes: { id: BackgroundMode; label: string; hint: string }[] = [
-  { id: 'midnight', label: '深色舞台', hint: '更像专业编辑器，适合科技感场景。' },
-  { id: 'aurora', label: '极光背景', hint: '更适合品牌展示和活动感内容。' },
-  { id: 'paper', label: '浅色商务', hint: '适合白底官网或销售资料风格。' },
+const themes: { id: BackgroundMode; label: string }[] = [
+  { id: 'midnight', label: '深色舞台' },
+  { id: 'aurora', label: '极光背景' },
+  { id: 'paper', label: '浅色商务' },
 ]
 
 export function ThemePanel() {
@@ -15,38 +15,29 @@ export function ThemePanel() {
   const setBackgroundMode = useEditorStore((state) => state.setBackgroundMode)
 
   return (
-    <div className="theme-panel">
-      <div className="theme-color-row">
-        <label className="field-block field-block--compact">
-          <span className="field-label">
-            <Palette size={14} />
-            主强调色
-          </span>
-          <div className="color-input-wrap">
-            <input
-              type="color"
-              value={accentColor}
-              onChange={(event) => setAccentColor(event.target.value)}
-            />
-            <code>{accentColor.toUpperCase()}</code>
-          </div>
-        </label>
-      </div>
-      <div className="theme-options">
+    <div className="theme-toolbar">
+      <div className="theme-toolbar__modes">
         {themes.map((theme) => (
           <button
             key={theme.id}
             type="button"
-            className={theme.id === backgroundMode ? 'theme-option theme-option--active' : 'theme-option'}
+            className={theme.id === backgroundMode ? 'theme-toolbar__mode theme-toolbar__mode--active' : 'theme-toolbar__mode'}
             onClick={() => setBackgroundMode(theme.id)}
           >
-            <div>
-              <strong>{theme.label}</strong>
-              <p>{theme.hint}</p>
-            </div>
-            {theme.id === backgroundMode ? <Check size={16} /> : <Sparkles size={16} />}
+            {theme.label}
+            {theme.id === backgroundMode ? <Check size={14} /> : null}
           </button>
         ))}
+      </div>
+      <div className="theme-options">
+        <label className="theme-toolbar__color">
+          <Palette size={14} />
+          <input
+            type="color"
+            value={accentColor}
+            onChange={(event) => setAccentColor(event.target.value)}
+          />
+        </label>
       </div>
     </div>
   )

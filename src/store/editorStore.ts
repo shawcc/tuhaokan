@@ -66,7 +66,7 @@ const initialAccent = '#5eead4'
 const initialBackgroundMode: BackgroundMode = 'paper'
 
 export const useEditorStore = create<EditorStore>((set) => ({
-  activeTemplate: 'hero',
+  activeTemplate: 'highlights',
   accentColor: initialAccent,
   backgroundMode: initialBackgroundMode,
   assets: [],
@@ -123,7 +123,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
     })),
   resetDemo: () =>
     set({
-      activeTemplate: 'hero',
+      activeTemplate: 'highlights',
       accentColor: initialAccent,
       backgroundMode: initialBackgroundMode,
       assets: [],

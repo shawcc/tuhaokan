@@ -1,4 +1,4 @@
-import { getTemplateById, templates } from '../../data/templates'
+import { templates } from '../../data/templates'
 import { useEditorStore } from '../../store/editorStore'
 import type { TemplateId } from '../../types/editor'
 
@@ -6,16 +6,6 @@ function TemplatePreview({ templateId }: { templateId: TemplateId }) {
   return (
     <div className={`template-preview template-preview--${templateId}`} aria-hidden="true">
       <div className="template-preview__brand" />
-      {templateId === 'hero' ? (
-        <>
-          <div className="template-preview__copy">
-            <span />
-            <strong />
-            <p />
-          </div>
-          <div className="template-preview__screen" />
-        </>
-      ) : null}
       {templateId === 'highlights' ? (
         <>
           <div className="template-preview__screen" />
@@ -83,14 +73,9 @@ function TemplatePreview({ templateId }: { templateId: TemplateId }) {
 export function TemplateRail() {
   const activeTemplate = useEditorStore((state) => state.activeTemplate)
   const setTemplate = useEditorStore((state) => state.setTemplate)
-  const currentTemplate = getTemplateById(activeTemplate)
 
   return (
     <div className="template-rail">
-      <div className="template-rail__header">
-        <span className="section-eyebrow">模板</span>
-        <h2>{currentTemplate.name}</h2>
-      </div>
       <div className="template-rail__list">
         {templates.map((template) => (
           <button
@@ -100,10 +85,7 @@ export function TemplateRail() {
             onClick={() => setTemplate(template.id)}
           >
             <TemplatePreview templateId={template.id} />
-            <div>
-              <strong>{template.name}</strong>
-              <small>{template.scenario}</small>
-            </div>
+            <strong>{template.name}</strong>
           </button>
         ))}
       </div>

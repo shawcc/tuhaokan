@@ -1,4 +1,4 @@
-import { Check, ImagePlus, Trash2, Upload } from 'lucide-react'
+import { Check, Trash2, Upload } from 'lucide-react'
 import { useState, type ChangeEvent } from 'react'
 import { getTemplateById } from '../../data/templates'
 import { useEditorStore } from '../../store/editorStore'
@@ -55,7 +55,15 @@ export function AssetUploader() {
           return (
             <label key={item.slot} className={hasValue ? 'asset-card asset-card--filled' : 'asset-card'}>
               <input type="file" accept="image/*" onChange={handleUpload(item.slot)} />
-              <div className="asset-card__icon">{hasValue ? <ImagePlus size={18} /> : <Upload size={18} />}</div>
+              <div className="asset-card__preview">
+                {hasValue ? (
+                  <img src={currentAsset?.dataUrl} alt={item.label} />
+                ) : (
+                  <div className="asset-card__icon">
+                    <Upload size={18} />
+                  </div>
+                )}
+              </div>
               <div>
                 <strong>
                   {item.label}
@@ -78,7 +86,7 @@ export function AssetUploader() {
               ) : (
                 <span className="asset-card__tag">
                   {item.required ? <Upload size={14} /> : <Check size={14} />}
-                  上传
+                  选择图片
                 </span>
               )}
             </label>

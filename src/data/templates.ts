@@ -1,4 +1,4 @@
-import type { AssetSlot, TemplateId } from '../types/editor'
+import type { AssetSlot, PosterContent, TemplateId } from '../types/editor'
 
 export interface TemplateAssetRequirement {
   slot: AssetSlot
@@ -15,7 +15,32 @@ export interface TemplateDefinition {
   previewLabel: string
   intent: string
   assetRequirements: TemplateAssetRequirement[]
+  contentEditors: TemplateContentEditor[]
 }
+
+type TemplateFieldKey = Extract<
+  keyof PosterContent,
+  'title' | 'subtitle' | 'quote' | 'customerName'
+>
+
+export type TemplateContentEditor =
+  | {
+      type: 'field'
+      key: TemplateFieldKey
+      label: string
+      placeholder: string
+      rows?: number
+    }
+  | {
+      type: 'metrics'
+      label: string
+      count: number
+    }
+  | {
+      type: 'highlights'
+      label: string
+      count: number
+    }
 
 export const POSTER_WIDTH = 1600
 export const POSTER_HEIGHT = 800
@@ -29,25 +54,8 @@ const optionalLogo: TemplateAssetRequirement = {
 
 export const templates: TemplateDefinition[] = [
   {
-    id: 'hero',
-    name: '封面主视觉型',
-    summary: '用一张主截图和一句话卖点，快速搭出品牌首屏。',
-    scenario: '官网头图 / 活动首屏',
-    previewLabel: '大图吸引 + 标题转化',
-    intent: '先用最强主视觉抓住注意力，再用标题和 CTA 完成转化。',
-    assetRequirements: [
-      {
-        slot: 'hero',
-        label: '主视觉截图',
-        hint: '首页、路线图或项目总览',
-        required: true,
-      },
-      optionalLogo,
-    ],
-  },
-  {
     id: 'highlights',
-    name: '功能亮点型',
+    name: '功能亮点',
     summary: '围绕截图做解释标注，适合讲清楚一个核心模块。',
     scenario: '功能介绍 / 售前讲解',
     previewLabel: '截图 + 标注解释',
@@ -61,10 +69,15 @@ export const templates: TemplateDefinition[] = [
       },
       optionalLogo,
     ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'field', key: 'subtitle', label: '副标题', placeholder: '输入副标题', rows: 3 },
+      { type: 'highlights', label: '亮点', count: 3 },
+    ],
   },
   {
     id: 'cards',
-    name: '多功能卡片型',
+    name: '多功能卡片',
     summary: '在一张图里放下多个卖点，适合能力总览。',
     scenario: '能力总览 / 官网模块',
     previewLabel: '主图 + 三卡片',
@@ -78,10 +91,15 @@ export const templates: TemplateDefinition[] = [
       },
       optionalLogo,
     ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'field', key: 'subtitle', label: '副标题', placeholder: '输入副标题', rows: 3 },
+      { type: 'highlights', label: '卡片', count: 3 },
+    ],
   },
   {
     id: 'steps',
-    name: '流程步骤型',
+    name: '流程步骤',
     summary: '把使用路径拆成 3 步，让复杂产品也容易理解。',
     scenario: '教程说明 / Onboarding',
     previewLabel: '流程分步说明',
@@ -95,10 +113,15 @@ export const templates: TemplateDefinition[] = [
       },
       optionalLogo,
     ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'field', key: 'subtitle', label: '说明', placeholder: '输入流程说明', rows: 3 },
+      { type: 'highlights', label: '步骤', count: 3 },
+    ],
   },
   {
     id: 'compare',
-    name: '前后对比型',
+    name: '前后对比',
     summary: '突出传统方式和产品方案的差异，强调改造价值。',
     scenario: '方案对比 / 升级价值',
     previewLabel: '左右对比呈现',
@@ -118,10 +141,14 @@ export const templates: TemplateDefinition[] = [
       },
       optionalLogo,
     ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'field', key: 'subtitle', label: '说明', placeholder: '输入对比说明', rows: 3 },
+    ],
   },
   {
     id: 'metrics',
-    name: '数据成果型',
+    name: '数据成果',
     summary: '把效率、转化、上线周期这些结果直接亮出来。',
     scenario: 'ROI 展示 / 成果背书',
     previewLabel: '指标卡 + 截图',
@@ -135,10 +162,14 @@ export const templates: TemplateDefinition[] = [
       },
       optionalLogo,
     ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'metrics', label: '指标', count: 3 },
+    ],
   },
   {
     id: 'devices',
-    name: '多端展示型',
+    name: '多端展示',
     summary: '同时展示桌面端和移动端，强化产品完整度。',
     scenario: '多端产品 / SaaS 工具',
     previewLabel: 'PC + 手机联动',
@@ -158,10 +189,14 @@ export const templates: TemplateDefinition[] = [
       },
       optionalLogo,
     ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'field', key: 'subtitle', label: '说明', placeholder: '输入多端说明', rows: 3 },
+    ],
   },
   {
     id: 'case',
-    name: '案例背书型',
+    name: '案例背书',
     summary: '用客户声音和截图一起讲故事，增强可信度。',
     scenario: '案例宣传 / 客户故事',
     previewLabel: '客户评价 + 成果',
@@ -174,6 +209,11 @@ export const templates: TemplateDefinition[] = [
         required: true,
       },
       optionalLogo,
+    ],
+    contentEditors: [
+      { type: 'field', key: 'title', label: '主标题', placeholder: '输入主标题' },
+      { type: 'field', key: 'quote', label: '引用语', placeholder: '输入客户引用语', rows: 4 },
+      { type: 'field', key: 'customerName', label: '客户名称', placeholder: '输入客户名称' },
     ],
   },
 ]
